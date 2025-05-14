@@ -1,5 +1,5 @@
 # ChatMCP Widgets
-
+![image](https://github.com/user-attachments/assets/589bd755-491c-4dfb-bfaf-56d9a7cd155e)
 ![ChatMCP Widgets](https://img.shields.io/badge/ChatMCP-Widgets-blue?style=for-the-badge)
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
@@ -35,6 +35,7 @@ A lightweight self-hosted platform for hosting and configuring MCP-enabled chat 
 ```
 
 ## 🌟 Features
+![image](https://github.com/user-attachments/assets/ca477edb-a265-4c60-ac7c-053368b515fa)
 
 - **Customizable Widgets**: Create chat widgets with custom positions, sizes, and AI providers.
 - **MCP Tool Support**: Connect to MCP servers to give your chat widgets access to powerful tools like file access, API integrations, and more.
