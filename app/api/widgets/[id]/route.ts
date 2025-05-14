@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
-import { widgets, widgetMcpServers } from "@/lib/db/schema"
+import { widgets, widgetMcpServers, widgetConversations } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 
 // GET /api/widgets/[id] - Get a specific widget
@@ -87,7 +87,11 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     const unwrappedParams = await params;
     const id = Number.parseInt(unwrappedParams.id)
 
-    // Delete the widget (cascade will handle related records)
+    // First delete all associated conversations
+    // This is necessary because widgetConversations doesn't have onDelete: "cascade"
+    await db.delete(widgetConversations).where(eq(widgetConversations.widgetId, id))
+    
+    // Now delete the widget (cascade will handle other related records like widgetMcpServers)
     await db.delete(widgets).where(eq(widgets.id, id))
 
     return NextResponse.json({ success: true })

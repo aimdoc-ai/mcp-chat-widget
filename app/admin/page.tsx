@@ -4,9 +4,10 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { PlusCircle, Edit, Trash2, Server, Bot } from "lucide-react"
+import { PlusCircle, Edit, Trash2, Server, Bot, Copy } from "lucide-react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
+import { toast } from "sonner"
 
 interface Widget {
   id: number
@@ -28,9 +29,18 @@ export default function AdminPage() {
         if (response.ok) {
           const data = await response.json()
           setWidgets(data)
+        } else {
+          toast.error("Failed to load widgets", {
+            description: "There was a problem loading your widgets. Please try refreshing the page.",
+            duration: 5000,
+          });
         }
       } catch (error) {
         console.error("Failed to fetch widgets:", error)
+        toast.error("Failed to load widgets", {
+          description: "An unexpected error occurred while loading your widgets. Please try refreshing the page.",
+          duration: 5000,
+        });
       } finally {
         setLoading(false)
       }
@@ -44,16 +54,38 @@ export default function AdminPage() {
       return
     }
 
+    // Find the widget to get its name for the toast message
+    const widgetToDelete = widgets.find(widget => widget.id === id);
+    const widgetName = widgetToDelete?.name || "Widget";
+
     try {
       const response = await fetch(`/api/widgets/${id}`, {
         method: "DELETE",
       })
 
       if (response.ok) {
+        // Show success toast notification
+        toast.success("Widget deleted", {
+          description: `${widgetName} has been successfully deleted.`,
+          duration: 3000,
+        });
+        
+        // Update the UI by removing the deleted widget
         setWidgets(widgets.filter((widget) => widget.id !== id))
+      } else {
+        // Show error toast notification
+        toast.error("Failed to delete widget", {
+          description: "An error occurred while trying to delete the widget.",
+          duration: 5000,
+        });
       }
     } catch (error) {
       console.error("Failed to delete widget:", error)
+      // Show error toast notification
+      toast.error("Failed to delete widget", {
+        description: "An unexpected error occurred. Please try again.",
+        duration: 5000,
+      });
     }
   }
 
@@ -99,17 +131,24 @@ export default function AdminPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl">
           {widgets.map((widget) => (
             <Card key={widget.id} className="overflow-hidden transition-all duration-200 hover:shadow-md">
               <CardHeader className="pb-3">
-                <CardTitle className="flex items-center">
+                <CardTitle className="flex items-center justify-between">
                   <span className="text-lg line-clamp-1">{widget.name}</span>
-                  <Badge variant="outline" className={`ml-2 ${getProviderBadgeColor(widget.defaultProvider)}`}>
-                    {widget.defaultProvider === 'openai' ? 'OpenAI' : 'Anthropic'}
-                  </Badge>
+                  <Button variant="outline" size="sm" onClick={() => {
+                    navigator.clipboard.writeText(widget.id.toString());
+                    toast.success("Widget ID copied to clipboard");
+                  }}>
+                      <Copy className="mr-2 h-3.5 w-3.5" />
+                       id: {widget.id}
+                  </Button>
                 </CardTitle>
-                <CardDescription className="line-clamp-2 min-h-[40px]">
+                <CardDescription className="flex flex-col line-clamp-2 min-h-[40px]">
+                  <Badge variant="outline" className={`mr-2 ${getProviderBadgeColor(widget.defaultProvider)}`}>
+                      {widget.defaultProvider === 'openai' ? 'OpenAI' : 'Anthropic'}
+                  </Badge>
                   {widget.description || "No description provided"}
                 </CardDescription>
               </CardHeader>
