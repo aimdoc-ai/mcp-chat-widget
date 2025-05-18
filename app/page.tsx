@@ -4,7 +4,7 @@ import { MessageSquare, Play, Layers, Server, History } from "lucide-react"
 
 export default function Home() {
   return (
-    <div className="w-full bg-gray-50">
+    <div className="w-full bg-muted">
       {/* Hero section */}
       <section className="w-full py-16 md:py-24">
         <div className="container max-w-screen-xl mx-auto px-4">
@@ -34,7 +34,7 @@ export default function Home() {
             </div>
 
             <div className="mx-auto w-full max-w-md">
-              <div className="relative p-4 bg-white rounded-xl border shadow-lg">
+              <div className="relative p-4 bg-primary/10 rounded-xl border shadow-lg">
                 <div className="flex items-center mb-4">
                   <MessageSquare className="h-5 w-5 mr-2" />
                   <h3 className="font-semibold">AI Chat Widget</h3>
@@ -55,7 +55,7 @@ export default function Home() {
       </section>
 
       {/* Features section */}
-      <section className="w-full py-16 md:py-24 bg-white">
+      <section className="w-full py-16 md:py-24 bg-background">
         <div className="container max-w-screen-xl mx-auto px-4">
           <div className="flex flex-col items-center text-center mb-12">
             <h2 className="text-3xl font-bold tracking-tight mb-4">

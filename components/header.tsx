@@ -13,10 +13,10 @@ export default function Header() {
         
         <div className="flex items-center space-x-2">
           <Button variant="ghost" size="sm" asChild className="text-sm font-normal">
-            <Link href="/admin">Admin</Link>
+            <Link href="/admin">Manage Widgets</Link>
           </Button>
           <Button variant="ghost" size="sm" asChild className="text-sm font-normal">
-            <Link href="/demo">Demo</Link>
+            <Link href="/demo">Playground</Link>
           </Button>
           <Button size="sm" asChild className="ml-4 text-sm">
             <Link href="/admin/widgets/new">Create Widget</Link>

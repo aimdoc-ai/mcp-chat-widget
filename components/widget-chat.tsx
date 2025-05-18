@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react"
 import { useChat } from "ai/react"
-import { Send, Loader2 } from "lucide-react"
+import { Loader2, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { ChatInput, ChatInputTextArea, ChatInputSubmit } from "@/components/chat-input"
 import {
   ExpandableChat,
   ExpandableChatHeader,
@@ -195,16 +196,22 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
                   body.appendChild(msg.cloneNode(true));
                 });
                 
-                // Create footer with form
+                // Create footer with ChatInput
                 const footer = document.createElement('div');
                 footer.className = 'border-t p-4';
+                
+                // We'll create a simplified version since we can't easily render React components here
+                // This will be styled to look similar to our ChatInput component
                 footer.innerHTML = `
-                  <form class="flex gap-2">
-                    <input class="flex-1 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background" placeholder="Type your message...">
-                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors h-10 w-10 bg-primary text-primary-foreground hover:bg-primary/90" type="submit">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                  <div class="flex flex-col items-end w-full p-2 rounded-2xl border border-input bg-transparent">
+                    <textarea class="w-full max-h-[400px] min-h-0 resize-none overflow-x-hidden border-none focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none" placeholder="Type your message..."></textarea>
+                    <button class="shrink-0 rounded-full p-1.5 h-fit border dark:border-zinc-600 bg-primary text-primary-foreground hover:bg-primary/90 mt-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m5 12 7-7 7 7"></path>
+                        <path d="M12 19V5"></path>
+                      </svg>
                     </button>
-                  </form>
+                  </div>
                 `;
                 
                 // Add components to container
@@ -219,27 +226,41 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
                 // Add the overlay to the body
                 document.body.appendChild(overlay);
                 
-                // Add event listener to the form
-                const form = maxContainer.querySelector('form');
-                const inputElement = maxContainer.querySelector('input') as HTMLInputElement;
-                if (form && inputElement) {
-                  // Sync input value with the original input
-                  const originalInputElement = document.querySelector('.expandable-chat-container input') as HTMLInputElement;
-                  inputElement.value = originalInputElement?.value || '';
+                // Add event listeners for the textarea and button
+                const textareaElement = maxContainer.querySelector('textarea') as HTMLTextAreaElement;
+                const submitButton = maxContainer.querySelector('button') as HTMLButtonElement;
+                
+                if (textareaElement && submitButton) {
+                  // Set initial value from the original chat input
+                  textareaElement.value = input;
                   
-                  form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    // Update the original input value
-                    if (originalInputElement && inputElement.value) {
-                      originalInputElement.value = inputElement.value;
-                      // Close the overlay and let the original form handle the submission
+                  // Handle submit button click
+                  submitButton.addEventListener('click', () => {
+                    if (textareaElement.value.trim()) {
+                      // Update the input value in the original chat
+                      handleInputChange({ target: { value: textareaElement.value } } as any);
+                      
+                      // Close the overlay
                       document.body.removeChild(overlay);
+                      
                       // Show the original chat widget again
                       const originalChat = document.querySelector('.expandable-chat-container');
                       if (originalChat) {
                         (originalChat as HTMLElement).style.display = '';
                       }
-                      handleSubmit(e as any);
+                      
+                      // Submit the form
+                      handleSubmit(new Event('submit') as any);
+                    }
+                  });
+                  
+                  // Handle Enter key in textarea
+                  textareaElement.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      if (textareaElement.value.trim()) {
+                        submitButton.click();
+                      }
                     }
                   });
                 }
@@ -274,8 +295,8 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
           messages.map((message, index) => (
             <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
               <div
-                className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                  message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
+                className={`text-wrap rounded-lg px-4 py-2 ${
+                  message.role === "user" ? "max-w-[80%] bg-primary text-primary-foreground" : "bg-muted"
                 }`}
               >
                 {message.parts?.map((part, i) => {
@@ -327,12 +348,15 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
       </ExpandableChatBody>
 
       <ExpandableChatFooter>
-        <form onSubmit={handleSubmit} className="flex gap-2">
-          <Input value={input} onChange={handleInputChange} placeholder="Type your message..." className="flex-1" />
-          <Button type="submit" size="icon" disabled={isLoading}>
-            <Send className="h-4 w-4" />
-          </Button>
-        </form>
+        <ChatInput
+          value={input}
+          onChange={handleInputChange}
+          onSubmit={handleSubmit}
+          loading={isLoading}
+        >
+          <ChatInputTextArea placeholder="Type your message..." />
+          <ChatInputSubmit />
+        </ChatInput>
       </ExpandableChatFooter>
     </ExpandableChat>
   )
