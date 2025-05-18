@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import * as ReactDOM from "react-dom/client";
-import reactToWebComponent from "react-to-webcomponent";
+import r2wc from "@r2wc/react-to-web-component";
 import { WidgetChat } from "./widget-chat";
 
 // This component will serve as a wrapper for the WidgetChat component
@@ -34,13 +33,24 @@ const WebComponentWrapper = (props: any) => {
 };
 
 // Convert the React component to a web component
-const WebComponent = reactToWebComponent(WebComponentWrapper, React, ReactDOM);
+const WebComponent = r2wc(WebComponentWrapper, { 
+  props: {
+    widgetId: "number",
+    name: "string",
+    description: "string",
+    systemPrompt: "string",
+    defaultProvider: "string",
+    position: "string",
+    size: "string",
+    mcpServers: "json"
+  } 
+});
 
 // Register the custom element with the browser
 // This will only run in the browser environment
 if (typeof window !== "undefined") {
   if (!customElements.get("mcp-chat-widget")) {
-    customElements.define("mcp-chat-widget", WebComponent as any);
+    customElements.define("mcp-chat-widget", WebComponent);
   }
 }
 

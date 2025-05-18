@@ -10,7 +10,7 @@ if (!fs.existsSync(outputDir)) {
 
 // Build the web component
 esbuild.build({
-  entryPoints: ['mcp-chat-widget.tsx'],
+  entryPoints: ['mcp-chat-widget-with-react.tsx'],
   bundle: true,
   minify: true,
   sourcemap: true,

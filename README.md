@@ -187,6 +187,9 @@ The web component approach offers several advantages:
 - Declarative configuration through HTML attributes
 - Better encapsulation and isolation
 - Easier to integrate with modern web frameworks
+- Tailwind CSS styles encapsulated in Shadow DOM
+
+The web component is built using [@r2wc/react-to-web-component](https://www.npmjs.com/package/@r2wc/react-to-web-component), which converts React components to custom elements with proper prop handling.
 
 To build the web component:
 
