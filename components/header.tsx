@@ -18,6 +18,9 @@ export default function Header() {
           <Button variant="ghost" size="sm" asChild className="text-sm font-normal">
             <Link href="/demo">Playground</Link>
           </Button>
+          <Button variant="ghost" size="sm" asChild className="text-sm font-normal">
+            <Link href="/webcomponent-example">Web Component</Link>
+          </Button>
           <Button size="sm" asChild className="ml-4 text-sm">
             <Link href="/admin/widgets/new">Create Widget</Link>
           </Button>
@@ -25,4 +28,4 @@ export default function Header() {
       </div>
     </header>
   )
-} 
+}

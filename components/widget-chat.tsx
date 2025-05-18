@@ -16,7 +16,7 @@ import { Markdown } from "@/components/markdown"
 import { ToolInvocation } from "@/components/tool-invocation"
 
 interface WidgetChatProps {
-  widgetId: number
+  widgetId?: number
   initialConfig?: {
     name?: string
     description?: string
@@ -61,6 +61,11 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
 
   useEffect(() => {
     async function fetchWidgetConfig() {
+      if (!widgetId) {
+        setLoading(false)
+        return
+      }
+      
       try {
         const response = await fetch(`/api/widgets/${widgetId}`)
         if (response.ok) {
@@ -84,8 +89,8 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
   }, [widgetId])
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, status, setMessages } = useChat({
-    api: `/api/widgets/${widgetId}/chat`,
-    id: `widget-${widgetId}`,
+    api: widgetId ? `/api/widgets/${widgetId}/chat` : '/api/chat',
+    id: widgetId ? `widget-${widgetId}` : 'default-widget',
   })
 
   if (loading) {

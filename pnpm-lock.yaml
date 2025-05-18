@@ -233,6 +233,9 @@ importers:
       react-resizable-panels:
         specifier: ^2.1.7
         version: 2.1.9(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react-to-webcomponent:
+        specifier: ^2.0.1
+        version: 2.0.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       recharts:
         specifier: 2.15.0
         version: 2.15.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -276,6 +279,9 @@ importers:
       drizzle-kit:
         specifier: ^0.31.1
         version: 0.31.1
+      esbuild:
+        specifier: ^0.25.4
+        version: 0.25.4
       postcss:
         specifier: ^8
         version: 8.5.3
@@ -1683,6 +1689,9 @@ packages:
         optional: true
       typescript:
         optional: true
+
+  '@r2wc/core@1.2.0':
+    resolution: {integrity: sha512-vAfiuS5KywtV54SRzc4maEHcpdgeUyJzln+ATpNCOkO+ArIuOkTXd92b5YauVAd0A8B2rV/y9OeVW19vb73bUQ==}
 
   '@radix-ui/number@1.1.0':
     resolution: {integrity: sha512-V3gRzhVNU1ldS5XhAPTom1fOIo4ccrjjJgmE+LI2h/WaFpHmx0MQApT+KZHnx8abG6Avtfcz4WoEciMnpFT3HQ==}
@@ -5361,6 +5370,12 @@ packages:
       '@types/react':
         optional: true
 
+  react-to-webcomponent@2.0.1:
+    resolution: {integrity: sha512-jpVztcA0SbV6TnBRV6EFuU+hmuuSIxgEww3wRcbneT0ytqn57y9ygeRfUmhzz8+bYg53u1h4COKk8iAextHE+Q==}
+    peerDependencies:
+      react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
   react-transition-group@4.4.5:
     resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}
     peerDependencies:
@@ -7886,6 +7901,8 @@ snapshots:
   '@prisma/client@6.7.0(typescript@5.8.3)':
     optionalDependencies:
       typescript: 5.8.3
+
+  '@r2wc/core@1.2.0': {}
 
   '@radix-ui/number@1.1.0': {}
 
@@ -12144,6 +12161,12 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.1.4
+
+  react-to-webcomponent@2.0.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      '@r2wc/core': 1.2.0
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   react-transition-group@4.4.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:

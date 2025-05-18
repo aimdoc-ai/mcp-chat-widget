@@ -145,7 +145,11 @@ To enable tool capabilities, you can connect your widget to one or more MCP serv
 
 ### Embedding Your Widget
 
-To embed a chat widget on your website, add the following code to your HTML:
+You have two options for embedding your chat widget on your website:
+
+#### Option 1: Traditional Script Embed
+
+Add the following code to your HTML:
 
 ```html
 <script src="https://your-chatmcp-domain.com/widget.js" defer></script>
@@ -159,6 +163,40 @@ To embed a chat widget on your website, add the following code to your HTML:
 ```
 
 Replace `YOUR_WIDGET_ID` with the ID of your chat widget from the admin dashboard.
+
+#### Option 2: Web Component (Recommended)
+
+Use the chat widget as a standard web component:
+
+```html
+<!-- Include the web component script -->
+<script src="https://your-chatmcp-domain.com/dist/mcp-chat-widget.js"></script>
+
+<!-- Use the web component in your HTML -->
+<mcp-chat-widget 
+  widget-id="123" 
+  name="My Chat Widget"
+  description="A customizable chat widget"
+  position="bottom-right"
+  size="md">
+</mcp-chat-widget>
+```
+
+The web component approach offers several advantages:
+- Standard HTML element that works with any framework
+- Declarative configuration through HTML attributes
+- Better encapsulation and isolation
+- Easier to integrate with modern web frameworks
+
+To build the web component:
+
+```bash
+npm run build:webcomponent
+```
+
+This will generate the web component bundle in `public/dist/mcp-chat-widget.js`.
+
+For a live example, visit `/webcomponent-example` in your browser or check out the standalone HTML example at `/webcomponent-example.html`.
 
 ## 🧩 Architecture
 

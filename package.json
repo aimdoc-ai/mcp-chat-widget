@@ -10,7 +10,8 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:migrate": "tsx lib/db/migrate.ts"
+    "db:migrate": "tsx lib/db/migrate.ts",
+    "build:webcomponent": "node scripts/build-webcomponent.js"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "latest",
@@ -88,6 +89,7 @@
     "react-hook-form": "^7.54.1",
     "react-markdown": "^10.1.0",
     "react-resizable-panels": "^2.1.7",
+    "react-to-webcomponent": "^2.0.1",
     "recharts": "2.15.0",
     "remark-gfm": "^4.0.1",
     "sonner": "^1.7.1",
@@ -104,6 +106,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.1",
+    "esbuild": "^0.25.4",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.4",
