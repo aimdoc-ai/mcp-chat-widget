@@ -4,190 +4,296 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MCP Chat Widget - Web Component Example</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
   <style>
-    /* Basic styling for the demo page */
+    :root {
+      --primary-color: #4f46e5;
+      --primary-hover: #4338ca;
+      --secondary-color: #f0f4ff;
+      --text-color: #1f2937;
+      --text-light: #6b7280;
+      --border-color: #e5e7eb;
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      --gradient-bg: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       line-height: 1.6;
-      color: #333;
+      color: var(--text-color);
+      background-color: #f9fafb;
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(79, 70, 229, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(124, 58, 237, 0.05) 0%, transparent 50%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+    
+    .page-container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 40px 20px;
     }
+    
     header {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 60px;
+      position: relative;
     }
+    
+    header::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--gradient-bg);
+      border-radius: 2px;
+    }
+    
     h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: var(--gradient-bg);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.025em;
     }
+    
     .subtitle {
-      font-size: 1.2rem;
-      color: #666;
+      font-size: 1.5rem;
+      color: var(--text-light);
+      font-weight: 400;
     }
+    
     .container {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 30px;
+      gap: 40px;
     }
+    
     @media (min-width: 768px) {
       .container {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
       }
     }
+    
     .card {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 20px;
+      border-radius: 16px;
+      padding: 40px;
       background-color: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    pre {
-      background-color: #f5f5f5;
-      padding: 15px;
-      border-radius: 5px;
-      overflow-x: auto;
-      font-size: 14px;
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.1);
     }
-    code {
-      font-family: 'Courier New', Courier, monospace;
-    }
-    .demo-area {
-      height: 500px;
-      border: 1px solid #eee;
-      border-radius: 8px;
+    
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 24px;
+      color: var(--primary-color);
       position: relative;
-      background-color: #fafafa;
+      display: inline-block;
     }
+    
+    h2::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--gradient-bg);
+      border-radius: 2px;
+    }
+    
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 24px;
+      color: var(--text-light);
+    }
+    
+    .section-intro {
+      margin-top: 40px;
+    }
+    
+    .config-section {
+      margin-top: 60px;
+    }
+    
+    pre {
+      background-color: #f8fafc;
+      padding: 24px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 15px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 32px;
+    }
+    
+    code {
+      font-family: 'Fira Code', 'Courier New', Courier, monospace;
+      color: #334155;
+    }
+    
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: var(--text-color);
+    }
+    
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 20px 0;
+      margin-bottom: 32px;
+      font-size: 0.95rem;
     }
-    table, th, td {
-      border: 1px solid #eee;
-    }
-    th, td {
-      padding: 10px;
-      text-align: left;
-    }
+    
     th {
-      background-color: #f5f5f5;
+      background-color: var(--secondary-color);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
+    }
+    
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    tr:last-child td {
+      border-bottom: none;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f9fafb;
+    }
+    
+    tr:hover {
+      background-color: var(--secondary-color);
+    }
+    
+    .code-tag {
+      color: #8b5cf6;
+    }
+    
+    .code-attr {
+      color: #059669;
+    }
+    
+    .code-string {
+      color: #d97706;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      color: var(--text-light);
+      font-size: 0.9rem;
     }
   </style>
+  
+  <!-- Include the web component script directly -->
+  <script src="/dist/mcp-chat-widget.js"></script>
 </head>
 <body>
-  <header>
-    <h1>MCP Chat Widget</h1>
-    <p class="subtitle">Web Component Implementation Example</p>
-  </header>
+  <div class="page-container">
+    <header>
+      <h1>MCP Chat Widget</h1>
+      <p class="subtitle">Powerful Web Component for AI Conversations</p>
+    </header>
 
-  <div class="container">
-    <div class="card">
-      <h2>How to Use</h2>
-      <p>Include the script and add the custom element to your HTML:</p>
-      <pre><code>&lt;!-- Include the web component script --&gt;
-&lt;script src="/dist/mcp-chat-widget.js"&gt;&lt;/script&gt;
+    <div class="container">
+      <div class="card">
+        <h2>Implementation Guide</h2>
+        <p class="section-intro">Integrate the MCP Chat Widget into your application with just a few lines of code. Simply include the script and add the custom element to your HTML:</p>
+        <pre><code><span class="code-tag">&lt;!-- Include the web component script --&gt;</span>
+<span class="code-tag">&lt;script</span> <span class="code-attr">src</span>=<span class="code-string">"/dist/mcp-chat-widget.js"</span><span class="code-tag">&gt;&lt;/script&gt;</span>
 
-&lt;!-- Use the web component in your HTML --&gt;
-&lt;mcp-chat-widget 
-  widget-id="123" 
-  name="My Chat Widget"
-  description="A customizable chat widget"
-  position="bottom-right"
-  size="md"&gt;
-&lt;/mcp-chat-widget&gt;</code></pre>
+<span class="code-tag">&lt;!-- Use the web component in your HTML --&gt;</span>
+<span class="code-tag">&lt;mcp-chat-widget</span> 
+  <span class="code-attr">widget-id</span>=<span class="code-string">"123"</span> 
+  <span class="code-attr">name</span>=<span class="code-string">"My Chat Widget"</span>
+  <span class="code-attr">description</span>=<span class="code-string">"A customizable chat widget"</span>
+  <span class="code-attr">position</span>=<span class="code-string">"bottom-right"</span>
+  <span class="code-attr">size</span>=<span class="code-string">"md"</span><span class="code-tag">&gt;</span>
+<span class="code-tag">&lt;/mcp-chat-widget&gt;</span></code></pre>
 
-      <h3>Available Attributes</h3>
-      <table>
-        <tr>
-          <th>Attribute</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-        <tr>
-          <td>widget-id</td>
-          <td>ID of the widget to load from the server</td>
-          <td>Optional</td>
-        </tr>
-        <tr>
-          <td>name</td>
-          <td>Name of the chat widget</td>
-          <td>"Chat Assistant"</td>
-        </tr>
-        <tr>
-          <td>description</td>
-          <td>Short description for the chat widget</td>
-          <td>""</td>
-        </tr>
-        <tr>
-          <td>system-prompt</td>
-          <td>Custom system prompt for the AI</td>
-          <td>Optional</td>
-        </tr>
-        <tr>
-          <td>default-provider</td>
-          <td>Default AI provider</td>
-          <td>Optional</td>
-        </tr>
-        <tr>
-          <td>position</td>
-          <td>Position of the widget - "bottom-right" or "bottom-left"</td>
-          <td>"bottom-right"</td>
-        </tr>
-        <tr>
-          <td>size</td>
-          <td>Size of the widget - "sm", "md", "lg", "xl", or "full"</td>
-          <td>"md"</td>
-        </tr>
-        <tr>
-          <td>mcp-servers</td>
-          <td>JSON string of MCP servers configuration</td>
-          <td>Optional</td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>Live Demo</h2>
-      <p>Below is a live example of the web component in action:</p>
-      <div class="demo-area">
-        <!-- The web component will be rendered here -->
+        <h3 class="config-section">Configuration Options</h3>
+        <table>
+          <tr>
+            <th>Attribute</th>
+            <th>Description</th>
+            <th>Default</th>
+          </tr>
+          <tr>
+            <td><code>widget-id</code></td>
+            <td>ID of the widget to load from the server</td>
+            <td>Optional</td>
+          </tr>
+          <tr>
+            <td><code>name</code></td>
+            <td>Name of the chat widget</td>
+            <td>"Chat Assistant"</td>
+          </tr>
+          <tr>
+            <td><code>description</code></td>
+            <td>Short description for the chat widget</td>
+            <td>""</td>
+          </tr>
+          <tr>
+            <td><code>system-prompt</code></td>
+            <td>Custom system prompt for the AI</td>
+            <td>Optional</td>
+          </tr>
+          <tr>
+            <td><code>default-provider</code></td>
+            <td>Default AI provider</td>
+            <td>Optional</td>
+          </tr>
+          <tr>
+            <td><code>position</code></td>
+            <td>Position of the widget - "bottom-right" or "bottom-left"</td>
+            <td>"bottom-right"</td>
+          </tr>
+          <tr>
+            <td><code>size</code></td>
+            <td>Size of the widget - "sm", "md", "lg", "xl", or "full"</td>
+            <td>"md"</td>
+          </tr>
+          <tr>
+            <td><code>mcp-servers</code></td>
+            <td>JSON string of MCP servers configuration</td>
+            <td>Optional</td>
+          </tr>
+        </table>
       </div>
+    </div>
+    
+    <div class="footer">
+      <p>© 2025 MCP Chat Widget. All rights reserved.</p>
     </div>
   </div>
 
-  <!-- Load and initialize the web component -->
-  <script>
-    // Wait for the DOM to be fully loaded
-    document.addEventListener('DOMContentLoaded', function() {
-      // Get the demo area
-      const demoArea = document.querySelector('.demo-area');
-      
-      // Load the web component script
-      const script = document.createElement('script');
-      script.src = '/dist/mcp-chat-widget.js';
-      
-      // When the script is loaded, create and add the web component
-      script.onload = function() {
-        // Create the web component
-        const chatWidget = document.createElement('mcp-chat-widget');
-        
-        // Set attributes
-        chatWidget.setAttribute('name', 'Demo Chat Widget');
-        chatWidget.setAttribute('description', 'Web Component Example');
-        chatWidget.setAttribute('position', 'bottom-right');
-        chatWidget.setAttribute('size', 'md');
-        chatWidget.setAttribute('widget-id', '2');
-        
-        // Add to the demo area
-        demoArea.appendChild(chatWidget);
-      };
-      
-      // Add the script to the document
-      document.head.appendChild(script);
-    });
-  </script>
+  <!-- Add the web component directly to the page -->
+  <mcp-chat-widget 
+    widget-id="2">
+  </mcp-chat-widget>
 </body>
 </html>

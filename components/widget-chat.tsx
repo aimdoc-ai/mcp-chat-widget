@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { createPortal } from "react-dom"
 import { useChat } from "ai/react"
-import { Loader2, Maximize, Eraser, X } from "lucide-react"
+import { Loader2, Maximize, X, PlusCircle, History, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ChatInput, ChatInputTextArea, ChatInputSubmit } from "@/components/chat-input"
 import {
@@ -34,6 +34,21 @@ interface WidgetChatProps {
   }
 }
 
+interface Conversation {
+  id: number
+  sessionId: string
+  createdAt: string
+  updatedAt: string
+  preview: string
+}
+
+interface Message {
+  id: number
+  role: string
+  content: string
+  createdAt: string
+}
+
 export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
   type WidgetConfig = {
     position: "bottom-right" | "bottom-left"
@@ -61,6 +76,12 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
   const [isMaximized, setIsMaximized] = useState(false)
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null)
   const originalChatRef = useRef<HTMLDivElement>(null);
+  
+  // Chat history state
+  const [showHistory, setShowHistory] = useState(false)
+  const [conversations, setConversations] = useState<Conversation[]>([])
+  const [selectedConversation, setSelectedConversation] = useState<number | null>(null)
+  const [loadingConversation, setLoadingConversation] = useState(false)
 
   // Create portal container for maximized view
   useEffect(() => {
@@ -139,10 +160,97 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
     id: widgetId ? `widget-${widgetId}` : 'default-widget',
   })
 
+  // Fetch conversations when history is opened
+  useEffect(() => {
+    if (showHistory && widgetId) {
+      fetchConversations()
+    }
+  }, [showHistory, widgetId])
+
+  // Function to fetch chat history conversations
+  const fetchConversations = async () => {
+    if (!widgetId) return
+    
+    try {
+      const response = await fetch(`/api/widgets/${widgetId}/conversations`)
+      if (response.ok) {
+        const data = await response.json()
+        setConversations(data)
+      }
+    } catch (error) {
+      console.error("Failed to fetch conversations:", error)
+    }
+  }
+
+  // Function to load a conversation
+  const loadConversation = async (conversationId: number) => {
+    if (!widgetId) return
+    
+    setLoadingConversation(true)
+    
+    try {
+      const response = await fetch(`/api/widgets/${widgetId}/conversations/${conversationId}/messages`)
+      if (response.ok) {
+        const messages = await response.json()
+        
+        // Convert to the format expected by useChat
+        const formattedMessages = messages.map((message: Message) => ({
+          id: message.id.toString(),
+          role: message.role,
+          content: message.content,
+        }))
+        
+        setMessages(formattedMessages)
+        setSelectedConversation(conversationId)
+        setShowHistory(false)
+      }
+    } catch (error) {
+      console.error("Failed to load conversation:", error)
+    } finally {
+      setLoadingConversation(false)
+    }
+  }
+
+  // Function to delete a conversation
+  const deleteConversation = async (conversationId: number) => {
+    if (!widgetId) return
+    
+    try {
+      const response = await fetch(`/api/widgets/${widgetId}/conversations/${conversationId}`, {
+        method: 'DELETE',
+      })
+      
+      if (response.ok) {
+        // Refresh the conversation list
+        fetchConversations()
+        
+        // If the deleted conversation was selected, clear the messages
+        if (selectedConversation === conversationId) {
+          setMessages([])
+          setSelectedConversation(null)
+        }
+      }
+    } catch (error) {
+      console.error("Failed to delete conversation:", error)
+    }
+  }
+
   const toggleMaximize = useCallback(() => {
     setIsMaximized(prev => !prev);
     console.log("Toggling maximize: ", !isMaximized); // Debug logging
   }, [isMaximized]);
+
+  // Function to create a new chat
+  const startNewChat = () => {
+    setMessages([])
+    setSelectedConversation(null)
+    setShowHistory(false)
+  }
+
+  // Function to toggle history view
+  const toggleHistory = () => {
+    setShowHistory(prev => !prev)
+  }
 
   // Function to render both normal and maximized chats with the same components
   const renderChatMessages = useCallback(() => (
@@ -206,6 +314,61 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
     </>
   ), [messages, isLoading, status]);
 
+  // Render chat history
+  const renderChatHistory = useCallback(() => (
+    <div className="h-full flex flex-col">
+      <div className="flex items-center justify-between">
+        <Button
+          variant="outline"
+          onClick={toggleHistory}
+          title="Back to Chat"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Return to Chat
+        </Button>
+      </div>
+      <div className="flex-grow overflow-y-auto p-2">
+        {conversations.length === 0 ? (
+          <div className="text-center text-muted-foreground py-8">No chat history found</div>
+        ) : (
+          <div className="space-y-2">
+            {conversations.map((conversation) => (
+              <div 
+                key={conversation.id}
+                className="p-3 bg-muted rounded-md cursor-pointer hover:bg-muted/80 transition-colors"
+                onClick={() => loadConversation(conversation.id)}
+              >
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-xs text-muted-foreground">
+                    {new Date(conversation.updatedAt).toLocaleString()}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-5 w-5"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      deleteConversation(conversation.id)
+                    }}
+                    title="Delete conversation"
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </div>
+                <p className="text-sm truncate">{conversation.preview}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {loadingConversation && (
+          <div className="fixed inset-0 bg-background/80 flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        )}
+      </div>
+    </div>
+  ), [conversations, loadingConversation]);
+
   // Render chat input for both normal and maximized views
   const renderChatInput = useCallback(() => (
     <ChatInput
@@ -237,13 +400,18 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => {
-                    // Clear the chat without reloading the page
-                    setMessages([]);
-                  }}
-                  title="Clear Chat"
+                  onClick={toggleHistory}
+                  title="Chat History"
                 >
-                 <Eraser className="h-4 w-4" />
+                  <History className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={startNewChat}
+                  title="New Chat"
+                >
+                 <PlusCircle className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="ghost"
@@ -258,11 +426,11 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
           </ExpandableChatHeader>
 
           <ExpandableChatBody className="p-4 space-y-4">
-            {renderChatMessages()}
+            {showHistory ? renderChatHistory() : renderChatMessages()}
           </ExpandableChatBody>
 
           <ExpandableChatFooter>
-            {renderChatInput()}
+            {!showHistory && renderChatInput()}
           </ExpandableChatFooter>
         </ExpandableChat>
       </div>
@@ -276,24 +444,42 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
               <h2 className="text-lg font-semibold">{config.name ?? "Chat Assistant"}</h2>
               <p className="text-xs text-muted-foreground">{config.description}</p>
             </div>
-            <Button
-              variant="ghost" 
-              size="icon"
-              onClick={toggleMaximize}
-              aria-label="Close"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleHistory}
+                title="Chat History"
+              >
+                <History className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={startNewChat}
+                title="New Chat"
+              >
+               <PlusCircle className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost" 
+                size="icon"
+                onClick={toggleMaximize}
+                aria-label="Close"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
           
           {/* Body */}
           <div className="flex-grow overflow-y-auto p-4 space-y-4">
-            {renderChatMessages()}
+            {showHistory ? renderChatHistory() : renderChatMessages()}
           </div>
           
           {/* Footer */}
           <div className="border-t p-4">
-            {renderChatInput()}
+            {!showHistory && renderChatInput()}
           </div>
         </div>,
         portalContainer

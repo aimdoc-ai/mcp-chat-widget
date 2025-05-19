@@ -35,7 +35,13 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     if (!sessionId) {
       sessionId = uuidv4()
-      // In a real implementation, you'd set the cookie in the response
+      // Set the cookie in the response
+      cookieStore.set(`widget_${widgetId}_session`, sessionId, { 
+        path: '/',
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+        httpOnly: true,
+        sameSite: 'strict',
+      })
     }
 
     // Get or create a conversation for this session
@@ -53,6 +59,12 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         .returning()
 
       conversation = newConversation
+    } else {
+      // Update the conversation's updatedAt timestamp
+      await db
+        .update(widgetConversations)
+        .set({ updatedAt: new Date() })
+        .where(eq(widgetConversations.id, conversation.id))
     }
 
     // Initialize MCP clients if the widget has MCP servers
@@ -102,7 +114,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
       // Track if the response has completed
       let responseCompleted = false
-
+      
       // Stream the response
       const result = streamText({
         model,

@@ -107,16 +107,11 @@ export default function WebComponentExamplePage() {
           </ul>
         </div>
 
-        <div className="border rounded-lg p-6">
+        <div className="demo-area border rounded-lg p-6" ref={demoAreaRef}>
           <h2 className="text-xl font-semibold mb-4">Live Demo</h2>
           <p className="mb-4 text-sm text-muted-foreground">
-            You can see the web component in action below.
+            You can see the web component in action by expanding the chat widget in the bottom right corner.
           </p>
-          
-          {/* Demo area where the web component will be rendered */}
-          <div className="demo-area h-64 border rounded-lg relative bg-background" ref={demoAreaRef}>
-            {/* The chat widget will be added here by the script onLoad callback */}
-          </div>
         </div>
       </div>
     </div>
