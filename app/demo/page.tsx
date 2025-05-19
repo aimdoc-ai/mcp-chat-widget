@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { WidgetChat } from "@/components/widget-chat"
 import { Button } from "@/components/ui/button"
@@ -12,7 +12,8 @@ import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { ArrowLeft, MessageSquare, Play } from "lucide-react"
 
-export default function DemoPage() {
+// Client component that uses useSearchParams
+function DemoContent() {
   const [widgetId, setWidgetId] = useState<number | null>(null)
   const [inputWidgetId, setInputWidgetId] = useState("")
   const searchParams = useSearchParams()
@@ -91,5 +92,33 @@ export default function DemoPage() {
         </div>
       )}
     </div>
+  )
+}
+
+// Loading fallback for Suspense
+function DemoFallback() {
+  return (
+    <div className="container max-w-screen-xl mx-auto px-4 py-8">
+      <div className="flex flex-col items-center text-center mb-8">
+        <Button variant="ghost" asChild className="mb-4 group">
+          <Link href="/">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </Link>
+        </Button>
+        <h1 className="text-2xl font-bold mb-2">Widget Demo</h1>
+        <p className="text-muted-foreground text-sm max-w-md">
+          Loading demo...
+        </p>
+      </div>
+    </div>
+  )
+}
+
+export default function DemoPage() {
+  return (
+    <Suspense fallback={<DemoFallback />}>
+      <DemoContent />
+    </Suspense>
   )
 }
