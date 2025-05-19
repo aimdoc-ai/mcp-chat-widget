@@ -26,7 +26,7 @@ export function AIIndicator({ loading = false, className = "" }: AIIndicatorProp
 
   return (
     <div
-      className={`w-full overflow-hidden rounded-full bg-gray-100 relative ${className}`}
+      className={`w-full overflow-hidden rounded-full bg-primary/10 relative ${className}`}
       style={{ height: "1.2px" }}
     >
       <div

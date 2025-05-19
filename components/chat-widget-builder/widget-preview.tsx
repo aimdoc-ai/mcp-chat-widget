@@ -191,14 +191,18 @@ export const WidgetPreview = ({ settings }: WidgetPreviewProps) => {
               {settings.modelProvider === "openai"
                 ? settings.model === "gpt-4o"
                   ? "GPT-4o"
-                  : settings.model === "gpt-4-turbo"
-                    ? "GPT-4 Turbo"
-                    : "GPT-3.5 Turbo"
-                : settings.model === "claude-3-opus"
-                  ? "Claude 3 Opus"
-                  : settings.model === "claude-3-sonnet"
-                    ? "Claude 3 Sonnet"
-                    : "Claude 3 Haiku"}
+                  : settings.model === "gpt-4.1"
+                    ? "GPT-4.1"
+                    : settings.model === "gpt-4.1-mini"
+                      ? "GPT-4.1-mini"
+                      : "GPT-4o"
+                : settings.model === "claude-3-7-sonnet-20250219"
+                  ? "Claude 3.7 Sonnet"
+                  : settings.model === "claude-3-5-sonnet-20241022"
+                    ? "Claude 3.5 Sonnet"
+                    : settings.model === "claude-3-5-haiku-20241022"
+                      ? "Claude 3.5 Haiku"
+                      : "Claude"}
             </div>
           </div>
         )}

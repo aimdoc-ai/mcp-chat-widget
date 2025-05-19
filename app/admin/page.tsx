@@ -8,7 +8,7 @@ import { PlusCircle, Edit, Trash2, Server, Bot, Copy } from "lucide-react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
-import { AIIndicator } from "@/components/indicator"
+import Loading from "@/components/loading"
 
 interface Widget {
   id: number
@@ -21,7 +21,7 @@ interface Widget {
 export default function AdminPage() {
   const [widgets, setWidgets] = useState<Widget[]>([])
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
+  const router = useRouter()  
 
   useEffect(() => {
     async function fetchWidgets() {
@@ -110,9 +110,7 @@ export default function AdminPage() {
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-12 px-24">
-          <AIIndicator loading={true} />
-        </div>
+        <Loading />
       ) : widgets.length === 0 ? (
         <Card className="border-dashed max-w-xl mx-auto">
           <CardContent className="flex flex-col items-center justify-center py-12 text-center">

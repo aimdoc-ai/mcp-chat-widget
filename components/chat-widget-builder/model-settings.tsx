@@ -22,14 +22,14 @@ export const ModelSettings = ({ settings, onSettingsChange }: ModelSettingsProps
     if (settings.modelProvider === "openai") {
       return [
         { value: "gpt-4o", label: "GPT-4o" },
-        { value: "gpt-4-turbo", label: "GPT-4 Turbo" },
-        { value: "gpt-3.5-turbo", label: "GPT-3.5 Turbo" },
+        { value: "gpt-4.1", label: "GPT-4.1" },
+        { value: "gpt-4.1-mini", label: "GPT-4.1-mini" },
       ]
     } else if (settings.modelProvider === "anthropic") {
       return [
-        { value: "claude-3-opus", label: "Claude 3 Opus" },
-        { value: "claude-3-sonnet", label: "Claude 3 Sonnet" },
-        { value: "claude-3-haiku", label: "Claude 3 Haiku" },
+        { value: "claude-3-7-sonnet-20250219", label: "Claude 3.7 Sonnet (20250219)" },
+        { value: "claude-3-5-sonnet-20241022", label: "Claude 3.5 Sonnet (20241022)" },
+        { value: "claude-3-5-haiku-20241022", label: "Claude 3.5 Haiku (20241022)" },
       ]
     }
     return []

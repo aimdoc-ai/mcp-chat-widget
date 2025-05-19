@@ -12,6 +12,7 @@ import { ModelSettings } from "./model-settings"
 import { MCPSettings } from "./mcp-settings"
 import { WidgetPreview } from "./widget-preview"
 import { HeaderBuilder } from "./header-builder"
+import { AIIndicator } from "../indicator"
 
 interface WidgetSettings {
   // Basic settings
@@ -234,9 +235,9 @@ export default function ChatWidgetBuilder({ widgetId }: ChatWidgetBuilderProps) 
   // Show loading spinner while fetching data
   if (loading) {
     return (
-      <div className="container py-10 flex justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-      </div>
+        <div className="mx-auto max-w-7xl py-24 flex justify-center">
+          <AIIndicator loading={true} />
+        </div>
     )
   }
 

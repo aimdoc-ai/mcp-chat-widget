@@ -8,7 +8,7 @@ import { Copy, Check, ArrowLeft, Code, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
-
+import Loading from "@/components/loading"
 interface EmbedPageProps {
   params: Promise<{
     id: string
@@ -169,9 +169,7 @@ export default function EmbedPage({ params }: EmbedPageProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full"></div>
-      </div>
+     <Loading />
     )
   }
 
