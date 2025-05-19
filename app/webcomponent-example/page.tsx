@@ -1,18 +1,67 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import dynamic from 'next/dynamic';
+
+// Import Script component only on client-side to avoid SSR issues
+const Script = dynamic(() => import('next/script'), { ssr: false });
 
 export default function WebComponentExamplePage() {
+  const demoAreaRef = useRef<HTMLDivElement>(null);
+
+  const handleScriptLoad = () => {
+    // Create and add the chat widget to the demo area after script is loaded
+    if (demoAreaRef.current && typeof window !== 'undefined') {
+      // Check if a widget already exists to prevent duplicates
+      if (!demoAreaRef.current.querySelector('mcp-chat-widget')) {
+        // Create web component 
+        const chatWidget = document.createElement('mcp-chat-widget');
+        chatWidget.setAttribute('name', 'Demo Chat Widget');
+        chatWidget.setAttribute('description', 'Web Component Example');
+        chatWidget.setAttribute('position', 'bottom-right');
+        chatWidget.setAttribute('size', 'md');
+        chatWidget.setAttribute('widget-id', '2');
+        
+        // Add to the demo area
+        demoAreaRef.current.appendChild(chatWidget);
+      }
+    }
+  };
+
+  // Also add a useEffect as fallback for script loading
   useEffect(() => {
-    // Import the web component only on the client side
-    import("@/components/mcp-chat-webcomponent");
+    // Only run in browser
+    if (typeof window === 'undefined' || !demoAreaRef.current) {
+      return;
+    }
+
+    // Check if web component is already defined
+    if (customElements.get('mcp-chat-widget')) {
+      handleScriptLoad();
+    } else {
+      // Load script dynamically if not loaded by Script component
+      const scriptEl = document.querySelector('script[src="/dist/mcp-chat-widget.js"]');
+      if (!scriptEl) {
+        const script = document.createElement('script');
+        script.src = '/dist/mcp-chat-widget.js';
+        script.onload = handleScriptLoad;
+        document.head.appendChild(script);
+      }
+    }
   }, []);
 
   return (
     <div className="container max-w-screen-xl mx-auto px-4 py-8">
+      {/* Load the web component script using Next.js Script component */}
+      <Script 
+        src="/dist/mcp-chat-widget.js" 
+        strategy="afterInteractive" 
+        onLoad={handleScriptLoad}
+      />
+
       <div className="flex flex-col items-center text-center mb-8">
         <Button variant="ghost" asChild className="mb-4 group">
           <Link href="/">
@@ -61,20 +110,15 @@ export default function WebComponentExamplePage() {
         <div className="border rounded-lg p-6">
           <h2 className="text-xl font-semibold mb-4">Live Demo</h2>
           <p className="mb-4 text-sm text-muted-foreground">
-            You can see the web component in action to the right.
+            You can see the web component in action below.
           </p>
           
-            {/* The web component will be rendered here */}
-            {/* @ts-ignore - Custom web component */}
-            <mcp-chat-widget
-              name="Demo Chat Widget"
-              description="Web Component Example"
-              position="bottom-right"
-              widget-id="2"
-              size="md"
-            />
+          {/* Demo area where the web component will be rendered */}
+          <div className="demo-area h-64 border rounded-lg relative bg-background" ref={demoAreaRef}>
+            {/* The chat widget will be added here by the script onLoad callback */}
           </div>
         </div>
       </div>
+    </div>
   );
 }

@@ -108,9 +108,13 @@
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.1",
     "esbuild": "^0.25.4",
+    "mini-css-extract-plugin": "^2.9.2",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "postcss-import": "^15.1.0",
+    "postcss-nesting": "^12.1.0",
+    "vite-plugin-css-injected-by-js": "^3.5.0"
   }
 }

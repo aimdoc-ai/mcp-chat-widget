@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MCP Chat Widget - Web Component Example</title>
   <style>
+    /* Basic styling for the demo page */
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       line-height: 1.6;
@@ -64,22 +65,15 @@
       border-collapse: collapse;
       margin: 20px 0;
     }
+    table, th, td {
+      border: 1px solid #eee;
+    }
     th, td {
-      border: 1px solid #ddd;
-      padding: 8px 12px;
+      padding: 10px;
       text-align: left;
     }
     th {
       background-color: #f5f5f5;
-    }
-    .back-link {
-      display: inline-block;
-      margin-top: 20px;
-      color: #0070f3;
-      text-decoration: none;
-    }
-    .back-link:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
@@ -94,7 +88,7 @@
       <h2>How to Use</h2>
       <p>Include the script and add the custom element to your HTML:</p>
       <pre><code>&lt;!-- Include the web component script --&gt;
-&lt;script src="./dist/mcp-chat-widget.js"&gt;&lt;/script&gt;
+&lt;script src="/dist/mcp-chat-widget.js"&gt;&lt;/script&gt;
 
 &lt;!-- Use the web component in your HTML --&gt;
 &lt;mcp-chat-widget 
@@ -107,55 +101,51 @@
 
       <h3>Available Attributes</h3>
       <table>
-        <thead>
-          <tr>
-            <th>Attribute</th>
-            <th>Description</th>
-            <th>Default</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>widget-id</td>
-            <td>ID of the widget to load from the server</td>
-            <td>Optional</td>
-          </tr>
-          <tr>
-            <td>name</td>
-            <td>Name of the chat widget</td>
-            <td>"Chat Assistant"</td>
-          </tr>
-          <tr>
-            <td>description</td>
-            <td>Short description for the chat widget</td>
-            <td>""</td>
-          </tr>
-          <tr>
-            <td>system-prompt</td>
-            <td>Custom system prompt for the AI</td>
-            <td>Optional</td>
-          </tr>
-          <tr>
-            <td>default-provider</td>
-            <td>Default AI provider</td>
-            <td>Optional</td>
-          </tr>
-          <tr>
-            <td>position</td>
-            <td>"bottom-right" or "bottom-left"</td>
-            <td>"bottom-right"</td>
-          </tr>
-          <tr>
-            <td>size</td>
-            <td>"sm", "md", "lg", "xl", or "full"</td>
-            <td>"md"</td>
-          </tr>
-          <tr>
-            <td>mcp-servers</td>
-            <td>JSON string of MCP servers configuration</td>
-            <td>[]</td>
-          </tr>
-        </tbody>
+        <tr>
+          <th>Attribute</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+        <tr>
+          <td>widget-id</td>
+          <td>ID of the widget to load from the server</td>
+          <td>Optional</td>
+        </tr>
+        <tr>
+          <td>name</td>
+          <td>Name of the chat widget</td>
+          <td>"Chat Assistant"</td>
+        </tr>
+        <tr>
+          <td>description</td>
+          <td>Short description for the chat widget</td>
+          <td>""</td>
+        </tr>
+        <tr>
+          <td>system-prompt</td>
+          <td>Custom system prompt for the AI</td>
+          <td>Optional</td>
+        </tr>
+        <tr>
+          <td>default-provider</td>
+          <td>Default AI provider</td>
+          <td>Optional</td>
+        </tr>
+        <tr>
+          <td>position</td>
+          <td>Position of the widget - "bottom-right" or "bottom-left"</td>
+          <td>"bottom-right"</td>
+        </tr>
+        <tr>
+          <td>size</td>
+          <td>Size of the widget - "sm", "md", "lg", "xl", or "full"</td>
+          <td>"md"</td>
+        </tr>
+        <tr>
+          <td>mcp-servers</td>
+          <td>JSON string of MCP servers configuration</td>
+          <td>Optional</td>
+        </tr>
       </table>
     </div>
 
@@ -165,32 +155,39 @@
       <div class="demo-area">
         <!-- The web component will be rendered here -->
       </div>
-      <script>
-        // Wait for the DOM to be fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-          // Create the web component dynamically
-          const demoArea = document.querySelector('.demo-area');
-          
-          // Load the web component script
-          const script = document.createElement('script');
-          script.src = './dist/mcp-chat-widget.js';
-          script.onload = function() {
-            // Create and add the web component after the script is loaded
-            const chatWidget = document.createElement('mcp-chat-widget');
-            chatWidget.setAttribute('name', 'Demo Chat Widget');
-            chatWidget.setAttribute('description', 'Web Component Example');
-            chatWidget.setAttribute('position', 'bottom-right');
-            chatWidget.setAttribute('size', 'md');
-            chatWidget.setAttribute('widget-id', '2');
-            demoArea.appendChild(chatWidget);
-          };
-          
-          document.head.appendChild(script);
-        });
-      </script>
     </div>
   </div>
 
-  <a href="/" class="back-link">← Back to Home</a>
+  <!-- Load and initialize the web component -->
+  <script>
+    // Wait for the DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get the demo area
+      const demoArea = document.querySelector('.demo-area');
+      
+      // Load the web component script
+      const script = document.createElement('script');
+      script.src = '/dist/mcp-chat-widget.js';
+      
+      // When the script is loaded, create and add the web component
+      script.onload = function() {
+        // Create the web component
+        const chatWidget = document.createElement('mcp-chat-widget');
+        
+        // Set attributes
+        chatWidget.setAttribute('name', 'Demo Chat Widget');
+        chatWidget.setAttribute('description', 'Web Component Example');
+        chatWidget.setAttribute('position', 'bottom-right');
+        chatWidget.setAttribute('size', 'md');
+        chatWidget.setAttribute('widget-id', '2');
+        
+        // Add to the demo area
+        demoArea.appendChild(chatWidget);
+      };
+      
+      // Add the script to the document
+      document.head.appendChild(script);
+    });
+  </script>
 </body>
 </html>
