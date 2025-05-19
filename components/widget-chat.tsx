@@ -1,11 +1,11 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback, useMemo } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { createPortal } from "react-dom"
 import { useChat } from "ai/react"
 import { Loader2, Maximize, X, PlusCircle, History, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { ChatInput, ChatInputTextArea, ChatInputSubmit } from "@/components/chat-input"
+import { ChatInput, ChatInputTextArea, ChatInputSubmit, ChatInputMic } from "@/components/chat-input"
 import {
   ExpandableChat,
   ExpandableChatHeader,
@@ -376,9 +376,18 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
       onChange={handleInputChange}
       onSubmit={handleSubmit}
       loading={isLoading}
+      setInputValue={(value) => handleInputChange({ target: { value } } as React.ChangeEvent<HTMLTextAreaElement>)}
     >
-      <ChatInputTextArea placeholder="Type your message..." />
-      <ChatInputSubmit />
+      <div className="flex w-full items-end gap-2">
+        <ChatInputTextArea 
+          placeholder="Type your message..." 
+          className="flex-grow" 
+        />
+        <div className="flex gap-2">
+          <ChatInputMic />
+          <ChatInputSubmit />
+        </div>
+      </div>
     </ChatInput>
   ), [input, handleInputChange, handleSubmit, isLoading]);
 

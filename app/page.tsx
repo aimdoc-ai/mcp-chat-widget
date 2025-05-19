@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { MessageSquare, Layers, Server, History, MoveRight } from "lucide-react"
-import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 
 export default function Home() {
