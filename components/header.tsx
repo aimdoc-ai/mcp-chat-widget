@@ -11,15 +11,12 @@ export default function Header() {
           <span className="font-medium">ChatMCP Widget</span>
         </Link>
         
-        <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="sm" asChild className="text-sm font-normal">
+        <div className="flex items-center space-x-4">
+          <Button variant="secondary" size="sm" asChild className="text-sm font-normal">
             <Link href="/admin">Manage Widgets</Link>
           </Button>
-          <Button variant="ghost" size="sm" asChild className="text-sm font-normal">
-            <Link href="/demo">Playground</Link>
-          </Button>
-          <Button variant="ghost" size="sm" asChild className="text-sm font-normal">
-            <Link href="/webcomponent-example">Web Component</Link>
+          <Button variant="secondary" size="sm" asChild className="text-sm font-normal">
+            <Link href="/demo">Test Widget</Link>
           </Button>
           <Button size="sm" asChild className="ml-4 text-sm">
             <Link href="/admin/widgets/new">Create Widget</Link>

@@ -81,16 +81,7 @@ export default function WebComponentExamplePage() {
           <div className="border rounded-lg p-4 bg-background overflow-x-auto mb-6">
             <pre className="text-sm">
               {`<!-- Include the web component script -->
-<script src="/dist/mcp-chat-widget.js"></script>
-
-<!-- Use the web component in your HTML -->
-<mcp-chat-widget 
-  widget-id="123" 
-  name="My Chat Widget"
-  description="A customizable chat widget"
-  position="bottom-right"
-  size="md">
-</mcp-chat-widget>`}
+<script src="http://http://localhost:3007/api/widgets/2/loader.js" async></script>`}
             </pre>
           </div>
           

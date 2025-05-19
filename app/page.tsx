@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { MessageSquare, Play, Layers, Server, History } from "lucide-react"
+import { MessageSquare, Layers, Server, History } from "lucide-react"
 
 export default function Home() {
   return (
@@ -26,7 +26,7 @@ export default function Home() {
                   </Link>
                 </Button>
                 <Button variant="outline" className="px-6" asChild>
-                  <Link href="/demo">
+                  <Link href="/webcomponent-example">
                     View Demo
                   </Link>
                 </Button>

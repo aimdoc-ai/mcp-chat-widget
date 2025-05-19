@@ -8,6 +8,7 @@ import { PlusCircle, Edit, Trash2, Server, Bot, Copy } from "lucide-react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
+import { AIIndicator } from "@/components/indicator"
 
 interface Widget {
   id: number
@@ -109,8 +110,8 @@ export default function AdminPage() {
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <div className="flex justify-center py-12 px-24">
+          <AIIndicator loading={true} />
         </div>
       ) : widgets.length === 0 ? (
         <Card className="border-dashed max-w-xl mx-auto">
@@ -167,10 +168,18 @@ export default function AdminPage() {
                     Edit
                   </Link>
                 </Button>
-                <Button variant="destructive" size="sm" onClick={() => deleteWidget(widget.id)}>
-                  <Trash2 className="mr-2 h-3.5 w-3.5" />
-                  Delete
-                </Button>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href={`/admin/widgets/${widget.id}/embed`}>
+                      <Copy className="mr-2 h-3.5 w-3.5" />
+                      Embed
+                    </Link>
+                  </Button>
+                  <Button variant="destructive" size="sm" onClick={() => deleteWidget(widget.id)}>
+                    <Trash2 className="mr-2 h-3.5 w-3.5" />
+                    Delete
+                  </Button>
+                </div>
               </CardFooter>
             </Card>
           ))}

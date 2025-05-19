@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Save } from "lucide-react"
+import { ArrowLeft, Save, Code } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
 import { BasicSettings } from "./basic-settings"
@@ -253,7 +253,15 @@ export default function ChatWidgetBuilder({ widgetId }: ChatWidgetBuilderProps) 
             </Button>
             <h1 className="text-2xl font-bold">{isNew ? "Create Widget" : "Edit Widget"}</h1>
             
-            <div className="ml-auto">
+            <div className="ml-auto flex gap-2">
+              {!isNew && (
+                <Button variant="outline" asChild className="flex items-center">
+                  <Link href={`/admin/widgets/${widgetId}/embed`}>
+                    <Code className="mr-2 h-4 w-4" />
+                    Embed
+                  </Link>
+                </Button>
+              )}
               <Button 
                 onClick={handleSave} 
                 disabled={saving}

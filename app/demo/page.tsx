@@ -2,7 +2,8 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import { WidgetChat } from "@/components/widget-chat"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -14,6 +15,18 @@ import { ArrowLeft, MessageSquare, Play } from "lucide-react"
 export default function DemoPage() {
   const [widgetId, setWidgetId] = useState<number | null>(null)
   const [inputWidgetId, setInputWidgetId] = useState("")
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const widgetIdParam = searchParams.get("widgetId")
+    if (widgetIdParam) {
+      const id = Number.parseInt(widgetIdParam)
+      if (!isNaN(id)) {
+        setWidgetId(id)
+        setInputWidgetId(widgetIdParam)
+      }
+    }
+  }, [searchParams])
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
