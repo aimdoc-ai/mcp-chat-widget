@@ -11,7 +11,8 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "db:migrate": "tsx lib/db/migrate.ts",
-    "build:webcomponent": "node scripts/build-webcomponent.js"
+    "build:webcomponent": "node scripts/build-webcomponent.js",
+    "build:fullscreen": "node scripts/build-fullscreen.js"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "latest",

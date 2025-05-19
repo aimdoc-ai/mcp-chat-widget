@@ -38,6 +38,7 @@ A lightweight self-hosted platform for hosting and configuring MCP-enabled chat 
 ![image](https://github.com/user-attachments/assets/ca477edb-a265-4c60-ac7c-053368b515fa)
 
 - **Customizable Widgets**: Create chat widgets with custom positions, sizes, and AI providers.
+- **Full Screen Chat**: Integrate a full screen chat experience that fills its parent container.
 - **MCP Tool Support**: Connect to MCP servers to give your chat widgets access to powerful tools like file access, API integrations, and more.
 - **Multiple Providers**: Choose between OpenAI and Anthropic models for each widget.
 - **Conversation History**: Chat history is automatically saved for each session. Users can continue conversations where they left off.
@@ -228,3 +229,37 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📞 Support
 
 For support or questions, please open an issue in the GitHub repository or contact the maintainers.
+
+### Using the FullScreenChat Component
+
+For applications that need a chat interface that fills the entire container rather than a floating widget, you can use the `FullScreenChat` component:
+
+```jsx
+import { FullScreenChat } from "chatmcp-widgets/components";
+
+function ChatPage() {
+  return (
+    <div className="h-screen">
+      <FullScreenChat 
+        widgetId={123}
+        initialConfig={{
+          name: "Full Screen Assistant",
+          description: "AI assistant that fills the entire container",
+          systemPrompt: "You are a helpful assistant...",
+          mcpServers: [
+            {
+              name: "My MCP Server",
+              url: "https://your-mcp-server.com",
+              isDefault: true
+            }
+          ]
+        }}
+      />
+    </div>
+  );
+}
+```
+
+The `FullScreenChat` component accepts the same configuration options as the widget but is designed to adapt to the size of its parent container. This is ideal for applications where you want to dedicate a full page or section to the chat interface rather than having a floating widget.
+
+To see a live example of the `FullScreenChat` component, visit `/full-screen-chat-example` in your browser.
