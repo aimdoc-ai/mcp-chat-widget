@@ -25,7 +25,7 @@ export async function GET(
     }
 
     // Get the base URL for the script resource
-    const host = process.env.NEXT_PUBLIC_URL || "http://localhost:3007"
+    const host = process.env.NEXT_PUBLIC_URL || "https://mcpwrapper.app"
     const protocol = host.includes("localhost") ? "http" : "https"
     const baseUrl = `${protocol}://${host}`
 

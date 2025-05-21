@@ -81,7 +81,7 @@ export default function WebComponentExamplePage() {
           <div className="border rounded-lg p-4 bg-background overflow-x-auto mb-6">
             <pre className="text-sm">
               {`<!-- Include the web component script -->
-<script src="http://http://localhost:3007/api/widgets/2/loader.js" async></script>`}
+<script src="https://mcpwrapper.app/api/widgets/2/loader.js" async></script>`}
             </pre>
           </div>
           
