@@ -25,9 +25,8 @@ export async function GET(
     }
 
     // Get the base URL for the script resource
-    const host = process.env.NEXT_PUBLIC_URL || "https://mcpwrapper.app"
-    const protocol = host.includes("localhost") ? "http" : "https"
-    const baseUrl = `${protocol}://${host}`
+    const baseUrl = process.env.NEXT_PUBLIC_URL || "https://mcpwrapper.app"
+
 
     // Create a JavaScript loader that automatically injects and initializes the widget
     const loaderScript = `
