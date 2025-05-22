@@ -96,7 +96,7 @@ export function FullScreenChat({ widgetId, initialConfig }: FullScreenChatProps)
   }, [widgetId])
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, status, setMessages } = useChat({
-    api: widgetId ? `/api/widgets/${widgetId}/chat` : '/api/chat',
+    api: widgetId ? `${process.env.NEXT_PUBLIC_URL}/api/widgets/${widgetId}/chat` : `https://mcpwrapper.app/api/chat`,
     id: widgetId ? `widget-${widgetId}` : 'default-widget',
   })
 
