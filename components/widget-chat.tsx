@@ -134,7 +134,7 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
       }
       
       try {
-        const response = await fetch(`/api/widgets/${widgetId}`)
+        const response = await fetch(`/api/proxy/widgets/${widgetId}`)
         if (response.ok) {
           const data = await response.json()
           setConfig({
@@ -156,7 +156,7 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
   }, [widgetId])
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, status, setMessages } = useChat({
-    api: widgetId ? `${process.env.NEXT_PUBLIC_URL}/api/widgets/${widgetId}/chat` : `https://mcpwrapper.app/api/chat`,
+    api: widgetId ? `/api/proxy/widgets/${widgetId}/chat` : `/api/proxy/chat`,
     id: widgetId ? `widget-${widgetId}` : 'default-widget',
   })
 
@@ -172,7 +172,7 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
     if (!widgetId) return
     
     try {
-      const response = await fetch(`/api/widgets/${widgetId}/conversations`)
+      const response = await fetch(`/api/proxy/widgets/${widgetId}/conversations`)
       if (response.ok) {
         const data = await response.json()
         setConversations(data)
@@ -189,7 +189,7 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
     setLoadingConversation(true)
     
     try {
-      const response = await fetch(`/api/widgets/${widgetId}/conversations/${conversationId}/messages`)
+      const response = await fetch(`/api/proxy/widgets/${widgetId}/conversations/${conversationId}/messages`)
       if (response.ok) {
         const messages = await response.json()
         
@@ -216,7 +216,7 @@ export function WidgetChat({ widgetId, initialConfig }: WidgetChatProps) {
     if (!widgetId) return
     
     try {
-      const response = await fetch(`/api/widgets/${widgetId}/conversations/${conversationId}`, {
+      const response = await fetch(`/api/proxy/widgets/${widgetId}/conversations/${conversationId}`, {
         method: 'DELETE',
       })
       
